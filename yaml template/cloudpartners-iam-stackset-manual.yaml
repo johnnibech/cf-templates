@@ -1,0 +1,40 @@
+
+#stack that creates a stackset manually adds the cloudpartners-iam role to child accounts.
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Conscia Account Access
+Resources:
+  ConsciaAccountAccess:
+    Type: AWS::CloudFormation::StackSet
+    Properties:
+      Capabilities:
+        - CAPABILITY_NAMED_IAM
+      OperationPreferences:
+        FailureToleranceCount: 5
+        FailureTolerancePercentage: 5
+        MaxConcurrentCount: 5
+        MaxConcurrentPercentage: 5
+        RegionOrder:
+          - eu-west-1
+      PermissionModel: SELF_MANAGED
+      StackSetName: ConsciaAccountAccess
+      TemplateBody: |
+        Resources:
+          CrossAccountAccess:
+            Type: AWS::IAM::Role
+            Properties:
+              RoleName: cloudpartners-iam
+              MaxSessionDuration: 7200
+              AssumeRolePolicyDocument:
+                Statement:
+                  - Action: sts:AssumeRole
+                    Effect: Allow
+                    Principal:
+                      AWS: arn:aws:iam::055524301700:root
+                    Condition:
+                      Bool:
+                        aws:MultiFactorAuthPresent: true
+                    Sid: ''
+                Version: '2012-10-17'
+              Path: "/"
+              ManagedPolicyArns:
+                - arn:aws:iam::aws:policy/AdministratorAccess

@@ -1,0 +1,61 @@
+#stack to manually add the conscia roles to an account.
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Billing, Admin and ReadOnly roles for conscia employees.
+Resources:
+  consciaBillingRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: conscia-billing
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/job-function/Billing
+        - arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              AWS: arn:aws:iam::055524301700:root
+            Condition:
+              Bool:
+                aws:MultiFactorAuthPresent: true
+            Sid: ''
+  consciaAdminRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: conscia-admin-iam
+      MaxSessionDuration: 7200
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              AWS: arn:aws:iam::055524301700:root
+            Condition:
+              Bool:
+                aws:MultiFactorAuthPresent: true
+            Sid: ''
+        Version: '2012-10-17'
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+  consciaReadOnlyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: conscia-readonly-iam
+      MaxSessionDuration: 7200
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              AWS: arn:aws:iam::055524301700:root
+            Condition:
+              Bool:
+                aws:MultiFactorAuthPresent: true
+            Sid: ''
+        Version: '2012-10-17'
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess                      

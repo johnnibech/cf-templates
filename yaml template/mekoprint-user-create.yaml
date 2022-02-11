@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  Mekoprintreadonly:  
+    Type: 'AWS::IAM::User'
+    Properties: 
+      UserName: mekoprint-read
+      LoginProfile:
+        Password: Passw0rd
+        PasswordResetRequired: true
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+       

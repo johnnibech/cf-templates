@@ -1,0 +1,23 @@
+#stack to manually add the cloudpartners-billing role to an account.
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Sales staff can take this role. CloudPartners can take this role
+Resources:
+  cloudPartnersIAMRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: cloudpartners-billing
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/job-function/Billing
+        - arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              AWS: "055524301700"
+            Action:
+              - 'sts:AssumeRole'
+            Condition:
+              Bool:
+                'aws:MultiFactorAuthPresent': "true"

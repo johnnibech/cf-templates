@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Description: S3 bucket for disaster recovery control
+    Properties:
+      BucketName: mekoprint-disaster-recovery
+      VersioningConfiguration:
+        Status: Enabled  
+      LifecycleConfiguration:
+          Rules:
+            - Id: delete_after_365
+              Status: Enabled
+              ExpirationInDays: 365
+              

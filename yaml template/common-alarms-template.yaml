@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'EC2 CPU Alarm'
+
+Resources:
+  CPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: CPU utilization alarm    
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Statistic: Average
+      Period: '60'
+      EvaluationPeriods: '3'
+      Threshold: '90'
+      ComparisonOperator: GreaterThanThreshold
+
+  RecoveryTestAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Trigger a recovery when instance status check fails for 15
+        consecutive minutes.
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed_System
+      Statistic: Minimum
+      Period: '60'
+      EvaluationPeriods: '15'
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: '0'
+  
+  NetworkInAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: NetworkIn Alarm    
+      MetricName: NetworkIn
+      Namespace: AWS/EC2
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Statistic: Maximum
+      Period: '360'
+      EvaluationPeriods: '10'
+      Threshold: '2100000000'
+      ComparisonOperator: GreaterThanThreshold
+
+  NetworkOutAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: NetworkOut alarm    
+      MetricName: NetworkOut
+      Namespace: AWS/EC2
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Statistic: Maximum
+      Period: '360'
+      EvaluationPeriods: '10'
+      Threshold: '2100000000'
+      ComparisonOperator: GreaterThanThreshold 
+
+  DiskWriteOpsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: DiskReadOps alarm    
+      MetricName: DiskReadOps 
+      Namespace: AWS/EC2
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Statistic: Maximum
+      Period: '60'
+      EvaluationPeriods: '3'
+      Threshold: '100000'
+      ComparisonOperator: GreaterThanThreshold    
+
+  RDSCPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: RDS CPU 100% alarm  
+      MetricName: CPUUtilization
+      Namespace: AWS/RDS
+      Statistic: Average
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Period: '60'
+      EvaluationPeriods: '3'
+      Threshold: '100'
+      ComparisonOperator: GreaterThanOrEqualToThreshold    

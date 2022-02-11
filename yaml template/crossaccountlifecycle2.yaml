@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Cross account administrator role from ConsciaCloudTeam
+Resources:
+  CrossAccountAccessStackSet:
+    Type: AWS::CloudFormation::StackSet
+    Properties:      
+      Capabilities:
+        - CAPABILITY_NAMED_IAM
+      OperationPreferences:
+        FailureToleranceCount: 5
+        FailureTolerancePercentage: 5
+        MaxConcurrentCount: 5
+        MaxConcurrentPercentage: 5
+        RegionOrder:
+          - eu-west-1
+      PermissionModel: SERVICE_MANAGED
+      StackSetName: CrossAccountAccessForSubAccounts
+      TemplateBody: |
+        Resources:
+          SumResource:
+            Type: "Custom::Summer"
+            Properties:
+              ServiceToken: "arn:aws:lambda:eu-central-1:145783308007:function:crhelper-lf3-resource"
+              BucketName: aws-landing-zone-s3-access-logs-484897813374-eu-central-1
+              LifecyclePolicy:
+                Rules:
+                - Status: Enabled
+                  Filter:
+                    Prefix: "/"
+                  Transitions:
+                  - Days: 90
+                    StorageClass: STANDARD_IA
+                  Expiration:
+                    Days: 180
+                  ID: Lifecycle90IA180del

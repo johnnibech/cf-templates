@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  Mekoprints3upload:  
+    Type: 'AWS::IAM::User'
+    Properties: 
+      UserName: mekoprint-s3-upload
+      Policies:
+        - PolicyName: InlineS3Access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:Get*'
+                  - 's3:List*'
+                  - 's3:Put*'
+                Resource: '*'   

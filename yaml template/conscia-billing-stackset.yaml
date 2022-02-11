@@ -1,0 +1,44 @@
+#Stack that creates a stackset that automatically adds the conscia-billing role to child accounts.
+
+
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Billing role from ConsciaCloudTeam
+Resources:
+  ConsciaBillingAccessStackSet:
+    Type: AWS::CloudFormation::StackSet
+    Properties:
+      AutoDeployment:
+        Enabled: true
+        RetainStacksOnAccountRemoval: false
+      Capabilities:
+        - CAPABILITY_NAMED_IAM
+      OperationPreferences:
+        FailureToleranceCount: 5
+        FailureTolerancePercentage: 5
+        MaxConcurrentCount: 5
+        MaxConcurrentPercentage: 5
+        RegionOrder:
+          - eu-west-1
+      PermissionModel: SERVICE_MANAGED
+      StackSetName: ConsciaBillingAccess
+      TemplateBody: |
+        Resources:
+          cloudPartnersIAMRole:
+            Type: 'AWS::IAM::Role'
+            Properties:
+              RoleName: conscia-billing
+              ManagedPolicyArns:
+                - arn:aws:iam::aws:policy/job-function/Billing
+                - arn:aws:iam::aws:policy/AWSOrganizationsReadOnlyAccess
+              AssumeRolePolicyDocument:
+                Version: 2012-10-17
+                Statement:
+                  - Effect: "Allow"
+                    Principal:
+                      AWS: "055524301700"
+                    Action:
+                      - 'sts:AssumeRole'
+                    Condition:
+                      Bool:
+                        'aws:MultiFactorAuthPresent': "true"

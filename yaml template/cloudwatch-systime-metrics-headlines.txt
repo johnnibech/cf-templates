@@ -1,0 +1,100 @@
+"Namespace": "AWS/S3",
+            "MetricName": "NumberOfObjects",
+
+"Namespace": "AWS/S3",
+            "MetricName": "BucketSizeBytes",
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeIdleTime",
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeWriteOps",
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeReadBytes",
+    
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeTotalReadTime",
+
+"Namespace": "AWS/EBS",
+            "MetricName": "BurstBalance",
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeWriteBytes",
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeTotalWriteTime",
+
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeWriteOps",
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeQueueLength",
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeTotalReadTime",
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeIdleTime",
+        
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeTotalReadTime",
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeReadOps"
+
+"Namespace": "AWS/EBS",
+            "MetricName": "VolumeIdleTime",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "StatusCheckFailed_System",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "StatusCheckFailed",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "MetadataNoToken",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "CPUSurplusCreditsCharged",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "EBSReadOps",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "NetworkPacketsIn",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "NetworkPacketsOut",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "CPUCreditUsage",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "DiskWriteOps",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "CPUUtilization",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "StatusCheckFailed_Instance",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "CPUCreditBalance",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "NetworkIn",
+
+"Namespace": "AWS/EC2",
+            "MetricName": "NetworkOut"
+
+"Namespace": "AWS/EC2",
+            "MetricName": "DiskWriteBytes",
+
+
+
+
+
+
+

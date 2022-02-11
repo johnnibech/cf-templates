@@ -1,0 +1,184 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'EC2 CPU Alarm'
+
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      Parameters:
+      - CPUAlarmPeriod
+      - CPUAlarmEvaluationPeriods
+      - CPUAlarmThreshold
+      - RecoveryTestAlarmPeriod
+      - RecoveryTestAlarmEvaluationPeriods
+      - RecoveryTestAlarmThreshold
+      - NetworkInAlarmPeriod
+      - NetworkInAlarmEvaluationPeriods
+      - NetworkInAlarmThreshold
+      - NetworkOutPeriod
+      - NetworkOutEvaluationPeriods
+      - NetworkOutThreshold
+      - DiskWriteOpsPeriod
+      - DiskWriteOpsEvaluationPeriods
+      - DiskWriteOpsThreshold
+      - RDSCPUPeriod
+      - RDSCPUEvaluationPeriods
+      - RDSCPUThreshold
+
+    
+Parameters:
+  CPUAlarmPeriod:
+    Description: 'Time period used as the time interval for alarm trigger'
+    Type: String
+    Default: '60'
+  CPUAlarmEvaluationPeriods:
+    Description: 'Number of evaluation periods before alarm is triggered'
+    Type: String
+    Default: '3'
+  CPUAlarmThreshold:
+    Description: 'Set the threshold of the alarm triggering'
+    Type: String
+    Default: '90'
+  RecoveryTestAlarmPeriod:
+    Description: 'Time period used as the time interval for alarm trigger'
+    Type: String
+    Default: '60'
+  RecoveryTestAlarmEvaluationPeriods:
+    Description: 'Number of evaluation periods before alarm is triggered'
+    Type: String
+    Default: '15'
+  RecoveryTestAlarmThreshold:
+    Description: 'Set the threshold of the alarm triggering'
+    Type: String
+    Default: '0'
+  NetworkInAlarmPeriod:
+    Description: 'Time period used as the time interval for alarm trigger'
+    Type: String
+    Default: '360'
+  NetworkInAlarmEvaluationPeriods:
+    Description: 'Number of evaluation periods before alarm is triggered'
+    Type: String
+    Default: '10'
+  NetworkInAlarmThreshold:
+    Description: 'Set the threshold of the alarm triggering'
+    Type: String
+    Default: '2100000000'
+  NetworkOutPeriod:
+    Description: 'Time period used as the time interval for alarm trigger'
+    Type: String
+    Default: '360'
+  NetworkOutEvaluationPeriods:
+    Description: 'Number of evaluation periods before alarm is triggered'
+    Type: String
+    Default: '10'
+  NetworkOutThreshold:
+    Description: 'Set the threshold of the alarm triggering'
+    Type: String
+    Default: '2100000000'
+  DiskWriteOpsPeriod:
+    Description: 'Time period used as the time interval for alarm trigger'
+    Type: String
+    Default: '60'
+  DiskWriteOpsEvaluationPeriods:
+    Description: 'Number of evaluation periods before alarm is triggered'
+    Type: String
+    Default: '3'
+  DiskWriteOpsThreshold:
+    Description: 'Set the threshold of the alarm triggering'
+    Type: String
+    Default: '100000'
+  RDSCPUPeriod:
+    Description: 'Time period used as the time interval for alarm trigger'
+    Type: String
+    Default: '60'
+  RDSCPUEvaluationPeriods:
+    Description: 'Number of evaluation periods before alarm is triggered'
+    Type: String
+    Default: '3'
+  RDSCPUThreshold:
+    Description: 'Set the threshold of the alarm triggering'
+    Type: String
+    Default: '100'          
+
+Resources:
+  CPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: CPU utilization alarm    
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Statistic: Average
+      Period: !Ref CPUAlarmPeriod
+      EvaluationPeriods: !Ref CPUAlarmEvaluationPeriods
+      Threshold: !Ref CPUAlarmThreshold
+      ComparisonOperator: GreaterThanThreshold
+
+  RecoveryTestAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Trigger a recovery when instance status check fails for 15
+        consecutive minutes.
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed_System
+      Statistic: Minimum
+      Period: !Ref RecoveryTestAlarmPeriod
+      EvaluationPeriods: !Ref RecoveryTestAlarmEvaluationPeriods
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: !Ref RecoveryTestAlarmThreshold
+  
+  NetworkInAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: NetworkIn Alarm    
+      MetricName: NetworkIn
+      Namespace: AWS/EC2
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Statistic: Maximum
+      Period: !Ref NetworkInAlarmPeriod
+      EvaluationPeriods: !Ref NetworkInAlarmEvaluationPeriods
+      Threshold: !Ref NetworkInAlarmThreshold
+      ComparisonOperator: GreaterThanThreshold
+
+  NetworkOutAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: NetworkOut alarm    
+      MetricName: NetworkOut
+      Namespace: AWS/EC2
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Statistic: Maximum
+      Period: !Ref NetworkOutPeriod
+      EvaluationPeriods: !Ref NetworkOutEvaluationPeriods
+      Threshold: !Ref NetworkOutThreshold
+      ComparisonOperator: GreaterThanThreshold 
+
+  DiskWriteOpsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: DiskReadOps alarm    
+      MetricName: DiskReadOps 
+      Namespace: AWS/EC2
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Statistic: Maximum
+      Period: !Ref DiskWriteOpsPeriod
+      EvaluationPeriods: !Ref DiskWriteOpsEvaluationPeriods
+      Threshold: !Ref DiskWriteOpsThreshold
+      ComparisonOperator: GreaterThanThreshold    
+
+  RDSCPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: RDS CPU 100% alarm  
+      MetricName: CPUUtilization
+      Namespace: AWS/RDS
+      Statistic: Average
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Period: !Ref RDSCPUPeriod
+      EvaluationPeriods: !Ref RDSCPUEvaluationPeriods
+      Threshold: !Ref RDSCPUThreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold    

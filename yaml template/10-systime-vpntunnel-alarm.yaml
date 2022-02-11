@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ""
+Resources:
+  CloudWatchAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      AlarmName: "vpntunnel_alarm"
+      AlarmDescription: "A CloudWatch Alarm that triggers when the state of both VPN tunnels in an AWS VPN connection are down."
+      MetricName: "TunnelState"
+      Namespace: "AWS/VPN"
+      Statistic: "Maximum"
+      Period: "300"
+      EvaluationPeriods: "1"
+      Threshold: "0"
+      ComparisonOperator: "LessThanOrEqualToThreshold"
+      AlarmActions:
+        - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"
+      Dimensions:
+        - Name: "VpnId"
+          Value: "Hjallerup Site - Systime Servere     "

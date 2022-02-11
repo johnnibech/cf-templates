@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'RDS Alarms'
+
+Resources:
+  LowFreeLocalSpace:
+          Type: AWS::CloudWatch::Alarm
+          Properties:
+            Namespace: AWS/RDS
+            MetricName: FreeLocalSpace
+            Dimensions:
+              - Name: DBInstanceIdentifier
+                Value: Reporting-db-1
+            AlarmActions:
+              - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"             
+            Statistic: Average
+            ComparisonOperator: LessThanOrEqualToThreshold
+            EvaluationPeriods: 1 
+            Period: 3600
+            Threshold: 2147483648
+
+  HighCPUUtilization:
+          Type: AWS::CloudWatch::Alarm
+          Properties:
+            Namespace: AWS/RDS
+            MetricName: CPUUtilization
+            Dimensions:
+              - Name: DBClusterIdentifier
+                Value: Reporting-db-1-cluster
+            AlarmActions:
+              - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"    
+            Statistic: Average
+            ComparisonOperator: GreaterThanOrEqualToThreshold
+            EvaluationPeriods: 5
+            Period: 60
+            Threshold: 100
+
+  HighNumberOfConnections:
+          Type: AWS::CloudWatch::Alarm
+          Properties:
+            Namespace: AWS/RDS
+            MetricName: DatabaseConnections
+            Dimensions:
+              - Name: DBClusterIdentifier
+                Value: Reporting-db-1-cluster
+            AlarmActions:
+              - "arn:aws:sns:eu-west-1:962573817479:PagerDuty"    
+            Statistic: Average
+            ComparisonOperator: GreaterThanOrEqualToThreshold
+            EvaluationPeriods: 5
+            Period: 60
+            Threshold: 5     
+
+
